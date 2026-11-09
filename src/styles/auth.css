@@ -1,0 +1,506 @@
+/* The public sign-in experience lives in auth-flows.css.
+   This file keeps the public marketing landing page, optimized for zero-scroll 100vh display,
+   modernized typography, and distinctive visual prestige. */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+.landing-page {
+  --public-ink: #0d2319;
+  --public-muted: #55685d;
+  --public-green: #078a4e;
+  --public-green-vibrant: #079455;
+  --public-green-dark: #04522e;
+  --public-emerald-glow: rgba(7, 148, 85, 0.42);
+  --public-amber: #d97706;
+  --public-border: #d7e4dc;
+  --public-surface: #ffffff;
+
+  min-height: 100vh;
+  color: var(--public-ink);
+  background: radial-gradient(circle at 85% 12%, rgba(187, 236, 207, 0.65), transparent 28rem),
+              radial-gradient(circle at 10% 88%, rgba(212, 238, 224, 0.45), transparent 22rem),
+              linear-gradient(155deg, #f9fdfa 0%, #edf5f0 100%);
+  padding: 0 clamp(16px, 4vw, 48px) 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-loading { padding: 32px; font-size: 14px; }
+
+/* Navigation compacte et élégante */
+.landing-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(7, 138, 78, 0.12);
+  flex-shrink: 0;
+}
+
+.landing-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--public-ink);
+  text-decoration: none;
+}
+
+.landing-brand-mark {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--public-green-vibrant) 0%, var(--public-green-dark) 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px var(--public-emerald-glow);
+}
+
+.landing-brand strong, .landing-brand small { display: block; }
+.landing-brand strong { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; color: #0a271a; }
+.landing-brand small { margin-top: 1px; color: var(--public-muted); font-size: 9.5px; }
+
+.landing-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.landing-badge-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: #ecfdf3;
+  border: 1px solid #a6f4c5;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--public-green);
+  transition: all 0.2s ease;
+}
+
+.landing-badge-link:hover {
+  background: #dcfae6;
+  border-color: var(--public-green);
+  transform: translateY(-1px);
+}
+
+.landing-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--public-green-vibrant);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.landing-badge-pill {
+  background: var(--public-green-vibrant);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 9.5px;
+  font-weight: 800;
+}
+
+.landing-nav .secondary-button {
+  border: 1.5px solid var(--public-green-vibrant);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--public-green-vibrant);
+  font-size: 12.5px;
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.landing-nav .secondary-button:hover {
+  background: var(--public-green-vibrant);
+  color: #ffffff;
+  box-shadow: 0 4px 14px var(--public-emerald-glow);
+}
+
+/* Section Hero Compacte */
+.landing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(290px, 0.85fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 48px);
+  padding: 16px 0 12px;
+  flex: 1;
+}
+
+.landing-copy {
+  max-width: 700px;
+}
+
+.landing-eyebrow {
+  margin: 0 0 8px;
+  color: var(--public-green);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Typographie Moderne et Distinctive pour "Gérez les moratoires..." */
+.landing-title {
+  max-width: 660px;
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  font-size: clamp(28px, 3.2vw, 42px);
+  line-height: 1.14;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  color: #0b2216;
+}
+
+.landing-title-accent {
+  background: linear-gradient(135deg, #079455 0%, #03532d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline;
+}
+
+.landing-introduction {
+  max-width: 580px;
+  margin: 10px 0 0;
+  color: var(--public-muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+/* Boutons d'Action — Couleur Éclatante Visible Directement */
+.landing-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.landing-actions .primary-button {
+  min-height: 44px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: 0;
+  background: linear-gradient(135deg, #079455 0%, #036637 100%);
+  color: #ffffff !important;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 18px var(--public-emerald-glow), 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-actions .primary-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+}
+
+.landing-actions .primary-button:hover {
+  background: linear-gradient(135deg, #08a55f 0%, #04753f 100%);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(7, 148, 85, 0.55);
+}
+
+.landing-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--public-border);
+  background: #ffffff;
+  color: var(--public-ink);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.landing-pill-btn:hover {
+  border-color: var(--public-green);
+  background: #f7faf8;
+  transform: translateY(-1px);
+}
+
+.landing-pill-stat {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.landing-text-link {
+  color: var(--public-green-vibrant);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.landing-text-link:hover {
+  background: rgba(7, 148, 85, 0.08);
+  text-decoration: underline;
+}
+
+.landing-access-note {
+  max-width: 540px;
+  margin: 10px 0 0;
+  color: #63776b;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+/* Carte Résumé du circuit (Étape 01, 02, 03) */
+.landing-summary {
+  padding: 16px 20px;
+  border: 1px solid var(--public-border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 28px rgba(7, 138, 78, 0.07);
+  backdrop-filter: blur(10px);
+}
+
+.landing-summary-label {
+  margin: 0 0 10px;
+  color: var(--public-green);
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.landing-summary ol {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.landing-summary li {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  border-top: 1px solid #ebf2ed;
+}
+
+.landing-summary li:first-child {
+  border-top: none;
+}
+
+.landing-summary li span {
+  color: var(--public-green);
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.landing-summary li strong {
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: #172b20;
+  font-weight: 600;
+}
+
+/* Section Piliers / Fonctionnalités clés */
+.landing-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.landing-features article {
+  padding: 12px 16px;
+  border: 1px solid var(--public-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.landing-features article:hover {
+  transform: translateY(-2px);
+  border-color: #9cd1b2;
+  box-shadow: 0 6px 18px rgba(7, 138, 78, 0.08);
+}
+
+.landing-features article > span {
+  color: var(--public-green);
+  font-size: 9.5px;
+  font-weight: 800;
+  background: #edf8f1;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+
+.landing-features h2 {
+  margin: 6px 0 3px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #112519;
+}
+
+.landing-features p {
+  margin: 0;
+  color: var(--public-muted);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   Ajustement Plein Écran (Zero Scroll / 100vh) sur Ordinateurs & Laptops
+   -------------------------------------------------------------------------- */
+@media (min-width: 901px) and (min-height: 580px) {
+  html:has(.landing-page),
+  body:has(.landing-page) {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .landing-page {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    padding: 0 clamp(20px, 3.5vw, 52px) 14px;
+    justify-content: space-between;
+  }
+
+  .landing-nav {
+    min-height: 50px;
+    padding: 4px 0;
+  }
+
+  .landing-hero {
+    padding: 8px 0;
+    gap: clamp(20px, 3.5vw, 44px);
+    flex: 1;
+    align-content: center;
+  }
+
+  .landing-copy {
+    max-width: 660px;
+  }
+
+  .landing-title {
+    font-size: clamp(26px, 2.8vw, 38px);
+    line-height: 1.13;
+  }
+
+  .landing-introduction {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .landing-actions {
+    margin-top: 14px;
+    gap: 12px;
+  }
+
+  .landing-access-note {
+    margin: 8px 0 0;
+    font-size: 10.5px;
+  }
+
+  .landing-summary {
+    padding: 14px 18px;
+  }
+
+  .landing-summary li {
+    min-height: 38px;
+  }
+
+  .landing-features {
+    margin: 0 auto;
+    gap: 12px;
+  }
+
+  .landing-features article {
+    padding: 10px 14px;
+  }
+
+  .landing-features h2 {
+    margin: 4px 0 2px;
+    font-size: 12.5px;
+  }
+
+  .landing-features p {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+}
+
+/* Responsive pour Tablettes et Mobiles */
+@media (max-width: 900px) {
+  .landing-page {
+    overflow-y: auto;
+  }
+
+  .landing-hero {
+    grid-template-columns: 1fr;
+    padding: 18px 0;
+    gap: 20px;
+  }
+
+  .landing-summary {
+    max-width: 100%;
+  }
+
+  .landing-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .landing-page { padding-inline: 14px; }
+  .landing-nav { min-height: 52px; }
+  .landing-brand small { display: none; }
+  .landing-title { font-size: 22px; }
+  .landing-hero { padding: 14px 0; }
+  .landing-actions { flex-direction: column; align-items: stretch; }
+  .landing-badge-link { display: none; }
+}

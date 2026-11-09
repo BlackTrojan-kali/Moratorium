@@ -1,0 +1,45 @@
+import { useEffect,useState } from 'react';
+import { Check,FileText } from 'lucide-react';
+import { Link,useNavigate,useParams } from 'react-router-dom';
+import { api } from '../../app/api';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { blankForm,kinds,filePayload,downloadUrl,type RequestFile,type RequestForm } from './requestTypes';
+import './requests.css';
+
+const STEPS=[
+ {label:'Employer',hint:'Organisation and contact',description:'Verify your organisation details and the contact person who will manage this request.'},
+ {label:'Debt',hint:'Amount owed to CNPS',description:'Enter the total debt shown on your debt statement.'},
+ {label:'Proposal',hint:'Repayment plan',description:'Propose a repayment period and, if relevant, request remission of penalties.'},
+ {label:'Documents',hint:'Supporting files',description:'Attach the required evidence. PDF, PNG or JPEG, 5 MiB each, up to 20 documents.'},
+ {label:'Review',hint:'Confirm and submit',description:'Check the summary, confirm accuracy, then submit the request for review.'},
+];
+
+export function RequestEditor() {
+ const {requestId}=useParams();const navigate=useNavigate();
+ const [record,setRecord]=useState<RequestFile|null>(null);const [form,setForm]=useState<RequestForm>(blankForm);
+ const [employer,setEmployer]=useState({name:'',cnps_number:''});const [step,setStep]=useState(0);const [error,setError]=useState('');const [message,setMessage]=useState('');const [busy,setBusy]=useState(false);const [loading,setLoading]=useState(true);
+ const [kind,setKind]=useState('request_letter');const [file,setFile]=useState<File|null>(null);
+ useEffect(()=>{let live=true;setLoading(true);setError('');
+  const load=requestId?api<{request:RequestFile}>(`/requests/${requestId}`).then(data=>{if(live){setRecord(data.request);setForm(data.request.form);setEmployer(data.request.employer);}}):api<{employer:{name:string;cnps_number:string};contactName:string;contactEmail:string}>('/employer').then(data=>{if(live){setEmployer(data.employer);setForm({...blankForm,contactName:data.contactName,contactEmail:data.contactEmail});setRecord(null);}});
+  load.catch(e=>{if(live)setError(e.message);}).finally(()=>{if(live)setLoading(false);});return()=>{live=false;};
+ },[requestId]);
+ async function save() { const result=await api<{request:RequestFile}>(record?`/requests/${record.id}/save`:'/requests',{...form,version:record?.version});setRecord(result.request);setForm(result.request.form);return result.request; }
+ async function run(work:()=>Promise<void>) {setBusy(true);setError('');setMessage('');try{await work();}catch(e){setError(e instanceof Error?e.message:'Unable to save.');}finally{setBusy(false);}}
+ const change=(key:keyof RequestForm,value:unknown)=>setForm(prev=>({...prev,[key]:value}));
+ if(loading)return <p role="status">Loading request…</p>;
+ if(requestId&&!record)return <p role="alert">{error||'Request not found.'}</p>;
+ if(record&&!['Draft','Action required'].includes(record.status))return <section className="panel"><p>This request is locked for editing at its current stage.</p><Link to={`/requests/${record.id}`}>View request</Link></section>;
+ const completed=[!!(form.contactName.trim()&&form.contactEmail.trim()),!!form.debtAmount,form.months!=null,(record?.documents.length||0)>0,form.declaration];
+ return <div className="request-workspace"><PageHeader eyebrow="Employer portal" title={record?`Edit ${record.reference}`:'New moratorium request'} description="Complete the employer, debt, proposal and supporting documents before submitting." action={<button className="secondary-button" disabled={busy} onClick={()=>void run(async()=>{const r=await save();setMessage('Draft saved.');if(!requestId)navigate(`/requests/${r.id}/edit`,{replace:true});})}>Save draft</button>}/>
+ {error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
+ <div className="request-editor"><nav className="request-stepper" aria-label="Request steps">{STEPS.map((s,index)=><button type="button" key={s.label} className={`step-item${step===index?' active':''}${completed[index]&&step!==index?' done':''}`} aria-current={step===index?'step':undefined} onClick={()=>setStep(index)} disabled={busy}><span className="step-indicator">{completed[index]&&step!==index?<Check size={14} strokeWidth={3} aria-hidden="true"/>:index+1}</span><span className="step-copy"><strong>{s.label}</strong><small>{s.hint}</small></span></button>)}</nav>
+ <section className="panel request-form"><header className="form-heading"><h2>{STEPS[step].label}</h2><p>{STEPS[step].description}</p></header>
+ <div className="form-section"><div className="form-grid">
+ {step===0&&<><label>Employer name<input readOnly value={employer.name}/></label><label>CNPS number<input readOnly value={employer.cnps_number}/></label><label>Contact person<input value={form.contactName} maxLength={120} onChange={e=>change('contactName',e.target.value)}/></label><label>Email<input type="email" value={form.contactEmail} onChange={e=>change('contactEmail',e.target.value)}/></label><label className="wide">Registered address<textarea value={form.address} maxLength={500} onChange={e=>change('address',e.target.value)}/></label></>}
+ {step===1&&<><label>Total debt in XAF<input inputMode="numeric" value={form.debtAmount||''} onChange={e=>change('debtAmount',e.target.value)}/></label><p className="wide form-note">Use the amount shown on your debt statement. CPS verifies the mandatory deposit before approval.</p></>}
+ {step===2&&<><label>Requested repayment months<input type="number" min={1} max={600} value={form.months??''} onChange={e=>change('months',e.target.value===''?null:Number(e.target.value))}/></label><label className="request-check"><input type="checkbox" checked={form.remissionRequested} onChange={e=>change('remissionRequested',e.target.checked)}/>Also request remission of penalties</label>{form.remissionRequested&&<label className="wide">Reasons for remission<textarea value={form.remissionReason} maxLength={4000} onChange={e=>change('remissionReason',e.target.value)}/></label>}</>}
+ {step===3&&<><p className="wide form-note">Required: signed request letter, debt statement, deposit proof and evidence of financial difficulty. CPS adds the reasoned opinion during review. PDF, PNG or JPEG; 5 MiB each, up to 20 documents.</p><div className="upload-row wide"><label>Document category<select value={kind} onChange={e=>setKind(e.target.value)}>{Object.entries(kinds).filter(([key])=>key!=='cps_opinion').map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></label><label>File<input type="file" accept=".pdf,.png,.jpg,.jpeg" onChange={e=>setFile(e.target.files?.[0]||null)}/></label><button className="secondary-button" disabled={busy||!file} onClick={()=>void run(async()=>{if(!file)return;const data=await filePayload(file);const saved=await save();const result=await api<{request:RequestFile}>(`/requests/${saved.id}/documents`,{version:saved.version,kind,fileName:file.name,data});setRecord(result.request);setMessage('Document added.');})}>Upload document</button></div>{record?.documents.length?<ul className="doc-list wide">{record.documents.map(doc=><li key={doc.id}><span className="doc-icon"><FileText size={16} aria-hidden="true"/></span><span className="doc-meta"><strong><a href={downloadUrl(doc.id)}>{doc.fileName}</a></strong><small>{kinds[doc.kind]}</small></span><button className="doc-remove" disabled={busy} onClick={()=>void run(async()=>{const data=await api<{request:RequestFile}>(`/requests/${record.id}/remove-document`,{version:record.version,documentId:doc.id});setRecord(data.request);})}>Remove</button></li>)}</ul>:<p className="wide form-note">No documents uploaded yet.</p>}</>}
+ {step===4&&<><dl className="wide review-summary"><div><dt>Employer</dt><dd>{employer.name}</dd></div><div><dt>Debt</dt><dd>{form.debtAmount||'Not entered'} XAF</dd></div><div><dt>Repayment period</dt><dd>{form.months||'Not entered'} months</dd></div><div><dt>Documents</dt><dd>{record?.documents.length||0} uploaded</dd></div></dl><label className="request-check wide"><input type="checkbox" checked={form.declaration} onChange={e=>change('declaration',e.target.checked)}/>I confirm that the information and supporting documents are accurate.</label><p className="wide form-note">Submitting sends the request for review. It does not constitute approval.</p></>}
+ </div></div><footer className="form-actions"><button className="secondary-button" disabled={busy||step===0} onClick={()=>setStep(step-1)}>Back</button>{step<4?<button className="primary-button" disabled={busy} onClick={()=>setStep(step+1)}>Continue</button>:<button className="primary-button" disabled={busy||!form.declaration} onClick={()=>void run(async()=>{const saved=await save();await api(`/requests/${saved.id}/submit`,{version:saved.version});navigate(`/requests/${saved.id}`);})}>{busy?'Submitting…':'Confirm and submit'}</button>}</footer></section></div>
+ <Link to={record?`/requests/${record.id}`:'/requests'}>Back to requests</Link></div>;
+}

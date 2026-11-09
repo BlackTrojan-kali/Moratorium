@@ -1,0 +1,408 @@
+/* Public account screens: sign in, forgot password, reset password, change password.
+   Follows the same visual language as the in-app pages (see pages.css). */
+
+.auth-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+  min-height: 100dvh;
+  background: var(--sifor-bg, #f3f7f4);
+  color: var(--sifor-text, #20372b);
+}
+
+.auth-main {
+  display: flex;
+  flex-direction: column;
+  padding: 30px clamp(22px, 5vw, 64px) 44px;
+  min-width: 0;
+}
+
+.auth-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.auth-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.auth-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--sifor-accent, #14583d);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.auth-brand strong,
+.auth-brand small {
+  display: block;
+}
+
+.auth-brand strong {
+  font-size: 17px;
+}
+
+.auth-brand small {
+  margin-top: 2px;
+  color: var(--sifor-muted, #64766b);
+  font-size: 10px;
+}
+
+.auth-back {
+  color: var(--sifor-muted, #64766b);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-back:hover {
+  color: var(--sifor-accent, #14583d);
+  text-decoration: underline;
+}
+
+.auth-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.auth-content {
+  width: min(100%, 430px);
+  margin: auto;
+  padding: 46px 0;
+}
+
+.auth-title {
+  margin: 0 0 10px;
+  font-size: clamp(28px, 3.4vw, 36px);
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+}
+
+.auth-lead {
+  margin: 0;
+  color: var(--sifor-muted, #64766b);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* --- Form ---------------------------------------------------------------- */
+
+.auth-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.auth-field {
+  display: grid;
+  gap: 8px;
+}
+
+.auth-field-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.auth-field input {
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 14px;
+  border: 1px solid var(--sifor-border, #dfe8e2);
+  border-radius: 10px;
+  outline: 0;
+  background: var(--sifor-surface, #fff);
+  color: var(--sifor-text, #20372b);
+  font: inherit;
+  font-size: 14px;
+}
+
+.auth-field input:focus {
+  border-color: var(--sifor-accent, #14583d);
+  box-shadow: 0 0 0 4px rgba(20, 88, 61, 0.12);
+}
+
+.auth-field input:disabled {
+  opacity: 0.6;
+}
+
+.auth-field-hint {
+  color: var(--sifor-muted, #64766b);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.auth-password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-password input {
+  padding-right: 52px;
+}
+
+/* Hide Microsoft Edge's native password-reveal button; the app draws its own
+   toggle (.auth-reveal), so the browser's icon would otherwise appear as a
+   second, overlapping eye. */
+.auth-password input::-ms-reveal,
+.auth-password input::-ms-clear {
+  display: none;
+}
+
+.auth-reveal {
+  position: absolute;
+  right: 6px;
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--sifor-muted, #64766b);
+  cursor: pointer;
+}
+
+.auth-reveal:hover {
+  background: var(--sifor-bg, #f3f7f4);
+  color: var(--sifor-accent, #14583d);
+}
+
+.auth-link {
+  color: var(--sifor-accent, #14583d);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+.auth-submit {
+  min-height: 48px;
+  width: 100%;
+  border: 1px solid var(--sifor-accent, #14583d);
+  border-radius: 10px;
+  background: var(--sifor-accent, #14583d);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-submit:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-footnote {
+  margin: 26px 0 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--sifor-border, #dfe8e2);
+  color: var(--sifor-muted, #64766b);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* --- Procedure stepper --------------------------------------------------- */
+
+.auth-steps {
+  display: grid;
+  gap: 12px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: auth-step;
+}
+
+.auth-steps li {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 12px;
+  color: var(--sifor-muted, #64766b);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.auth-steps li::before {
+  counter-increment: auth-step;
+  content: counter(auth-step);
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--sifor-selected, #e3f1e8);
+  color: var(--sifor-accent, #14583d);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* --- One-time reset link (email delivery is not configured) -------------- */
+
+.auth-token {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+  padding: 18px;
+  border: 1px dashed var(--sifor-border, #dfe8e2);
+  border-radius: 13px;
+  background: var(--sifor-surface, #fff);
+}
+
+.auth-token-label {
+  margin: 0;
+  color: var(--sifor-muted, #64766b);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.auth-token-value {
+  margin: 0;
+  padding: 11px 13px;
+  border-radius: 9px;
+  background: var(--sifor-bg, #f3f7f4);
+  color: var(--sifor-text, #20372b);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.auth-requirements {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--sifor-muted, #64766b);
+  font-size: 12px;
+}
+
+.auth-requirements li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-requirements li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.auth-requirements li[data-met="true"] {
+  color: var(--sifor-accent, #14583d);
+}
+
+/* --- Brand aside --------------------------------------------------------- */
+
+.auth-aside {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: clamp(30px, 5vw, 64px);
+  background: linear-gradient(160deg, #14583d 0%, #0d422d 100%);
+  color: #eaf5ee;
+  overflow: hidden;
+}
+
+.auth-aside::after {
+  content: "";
+  position: absolute;
+  inset: auto -140px -220px auto;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 212, 170, 0.28), transparent 65%);
+}
+
+.auth-aside-inner {
+  position: relative;
+  width: min(100%, 420px);
+  margin: auto;
+}
+
+.auth-aside-eyebrow {
+  margin: 0 0 18px;
+  color: #8bd4aa;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+.auth-aside-title {
+  margin: 0 0 16px;
+  color: #fff;
+  font-size: clamp(24px, 2.6vw, 31px);
+  line-height: 1.2;
+  letter-spacing: -0.6px;
+}
+
+.auth-aside-lead {
+  margin: 0;
+  color: #c4ddcd;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.auth-aside-foot {
+  margin: 30px 0 0;
+  color: #9db9a8;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+@media (max-width: 980px) {
+  .auth-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-aside {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .auth-main {
+    padding-inline: 18px;
+  }
+
+  .auth-content {
+    padding: 32px 0;
+  }
+
+  .auth-brand small {
+    display: none;
+  }
+}

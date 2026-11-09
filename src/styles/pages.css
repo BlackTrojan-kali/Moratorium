@@ -1,0 +1,828 @@
+/* Shared page design system.
+   ---------------------------------------------------------------------------
+   One structural language for every in-app screen: page shell, heading, cards,
+   lists, fields, buttons and states. "Help & Support" established this look,
+   so these classes make it reusable instead of being re-declared per page.
+
+   Tokens come from --sifor-* (defined once in settings.css, dark-mode aware).
+   The .help-* selectors are kept as aliases so the Help screen keeps working
+   while pages migrate to the .page-* names.
+   --------------------------------------------------------------------------- */
+
+.page,
+.help-page {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  color: var(--sifor-text, #20372b);
+}
+
+.page *,
+.page *::before,
+.page *::after {
+  box-sizing: border-box;
+}
+
+/* --- Page heading -------------------------------------------------------- */
+
+/* The sidebar already highlights where you are, so page titles are kept for
+   assistive technology only — this covers every workspace page, including the
+   ones that render their own heading. Delete this block to display them again. */
+.page-heading h1,
+.help-heading h1,
+.page-header h1,
+.workspace-main h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.page-heading,
+.help-heading {
+  margin-bottom: 26px;
+}
+
+.page-heading-eyebrow {
+  margin: 0 0 10px;
+  color: var(--sifor-muted, #64766b);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.page-heading p,
+.help-heading p {
+  margin: 0;
+  color: var(--sifor-muted, #64766b);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* --- Toolbar (search / filters) ------------------------------------------ */
+
+.page-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 58px;
+  padding: 0 18px;
+  margin-bottom: 22px;
+  border: 1px solid var(--sifor-border, #dfe8e2);
+  border-radius: 13px;
+  background: var(--sifor-surface, #fff);
+  color: var(--sifor-accent, #14583d);
+}
+
+.page-toolbar input,
+.page-toolbar select {
+  flex: 1;
+  min-width: 0;
+  min-height: 54px;
+  border: 0;
+  background: transparent;
+  color: var(--sifor-text, #20372b);
+  font: inherit;
+  font-size: 14px;
+}
+
+.page-toolbar input::placeholder {
+  color: var(--sifor-muted, #64766b);
+}
+
+.page-toolbar:focus-within {
+  outline: 2px solid var(--sifor-accent, #14583d);
+  outline-offset: 2px;
+}
+
+.page-toolbar input:focus,
+.page-toolbar select:focus {
+  outline: none;
+}
+
+.page-toolbar-label {
+  flex-shrink: 0;
+  color: var(--sifor-muted, #64766b);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* --- Layout -------------------------------------------------------------- */
+
+.page-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.page-grid,
+.help-guides {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+/* --- Cards --------------------------------------------------------------- */
+
+.page-card,
+.help-card {
+  min-width: 0;
+  padding: 25px;
+  border: 1px solid var(--sifor-border, #dfe8e2);
+  border-radius: 16px;
+  background: var(--sifor-surface, #fff);
+  box-shadow: 0 3px 10px #10271b05;
+}
+
+.page-card + .page-card,
+.page-card + .page-columns,
+.page-card + .page-grid {
+  margin-top: 22px;
+}
+
+.page-card h2,
+.help-card h2 {
+  margin: 0 0 22px;
+  font-size: 20px;
+  letter-spacing: -0.3px;
+}
+
+.page-card-heading,
+.help-card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.page-card-heading h2 {
+  margin-bottom: 8px;
+}
+
+.page-card-heading p {
+  margin: 0;
+  color: var(--sifor-muted, #64766b);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.page-card-text {
+  margin: 0;
+  color: var(--sifor-muted, #64766b);
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+/* --- Lists and rows ------------------------------------------------------ */
+
+.page-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--sifor-border, #dfe8e2);
+  border-radius: 11px;
+  overflow: hidden;
+}
+
+.page-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  width: 100%;
+  padding: 18px;
+  border: 0;
+  background: transparent;
+  color: var(--sifor-text, #20372b);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+}
+
+.page-row + .page-row,
+.page-list > li + li > .page-row {
+  border-top: 1px solid var(--sifor-border, #dfe8e2);
+}
+
+.page-row:hover {
+  background: var(--sifor-bg, #f3f7f4);
+}
+
+.page-row-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  background: var(--sifor-selected, #e3f1e8);
+  color: var(--sifor-accent, #14583d);
+}
+
+.page-row-copy {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.page-row-copy strong {
+  font-size: 14px;
+}
+
+.page-row-copy span {
+  color: var(--sifor-muted, #64766b);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.page-row-meta {
+  flex-shrink: 0;
+  color: var(--sifor-muted, #64766b);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* --- Description fields -------------------------------------------------- */
+
+.page-fields {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.page-field {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 17px 0;
+  border-top: 1px solid var(--sifor-border, #dfe8e2);
+}
+
+.page-field:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.page-field:last-child {
+  padding-bottom: 0;
+}
+
+.page-field dt {
+  color: var(--sifor-muted, #64766b);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.page-field dd {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.page-field-lock {
+  display: inline-grid;
+  place-items: center;
+  color: var(--sifor-muted, #64766b);
+}
+
+@media (max-width: 700px) {
+  .page-field {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+/* --- Form controls ------------------------------------------------------- */
+
+.page-form {
+  display: grid;
+  gap: 18px;
+  max-width: 560px;
+}
+
+.page-form-field {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.page-form-field input,
+.page-form-field select,
+.page-form-field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 14px;
+  border: 1px solid var(--sifor-border, #dfe8e2);
+  border-radius: 10px;
+  outline: 0;
+  background: var(--sifor-bg, #f3f7f4);
+  color: var(--sifor-text, #20372b);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.page-form-field input:focus,
+.page-form-field select:focus,
+.page-form-field textarea:focus {
+  border-color: var(--sifor-accent, #14583d);
+  box-shadow: 0 0 0 4px rgba(20, 88, 61, 0.12);
+}
+
+.page-form-hint {
+  color: var(--sifor-muted, #64766b);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-actions-end {
+  justify-content: flex-end;
+}
+
+/* --- Buttons ------------------------------------------------------------- */
+
+.page-button,
+.help-button {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid var(--sifor-border, #dfe8e2);
+  border-radius: 9px;
+  background: var(--sifor-surface, #fff);
+  color: var(--sifor-accent, #14583d);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.page-button:hover:not(:disabled),
+.help-button:hover:not(:disabled) {
+  border-color: var(--sifor-accent, #14583d);
+}
+
+.page-button-primary {
+  border-color: var(--sifor-accent, #14583d);
+  background: var(--sifor-accent, #14583d);
+  color: #fff;
+}
+
+.page-button-primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.page-button-danger {
+  border-color: #c8918f;
+  color: #9c2b2b;
+}
+
+.page-button:disabled,
+.page-button-primary:disabled,
+.help-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.page-icon-button,
+.help-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--sifor-muted, #64766b);
+  cursor: pointer;
+}
+
+.page-icon-button:hover,
+.help-icon-button:hover {
+  background: var(--sifor-bg, #f3f7f4);
+  color: var(--sifor-accent, #14583d);
+}
+
+.page-icon-button:focus-visible,
+.help-icon-button:focus-visible {
+  outline: 2px solid var(--sifor-accent, #14583d);
+  outline-offset: 2px;
+}
+
+/* --- Navigation rail ----------------------------------------------------- */
+
+.page-nav {
+  display: grid;
+  gap: 6px;
+}
+
+.page-nav button,
+.page-nav a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 15px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--sifor-text, #20372b);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.page-nav button:hover:not(:disabled),
+.page-nav a:hover {
+  background: var(--sifor-bg, #f3f7f4);
+}
+
+.page-nav button[aria-current="page"],
+.page-nav a[aria-current="page"] {
+  background: var(--sifor-selected, #e3f1e8);
+  color: var(--sifor-accent, #14583d);
+}
+
+.page-nav button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* --- States -------------------------------------------------------------- */
+
+.page-state,
+.help-state,
+.help-empty {
+  color: var(--sifor-muted, #64766b);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.page-state h2,
+.help-state h2 {
+  color: var(--sifor-text, #20372b);
+}
+
+.page-empty,
+.help-empty {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.page-alert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid #e2bcbb;
+  border-radius: 11px;
+  background: #fdf1f0;
+  color: #93231f;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.page-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid #bfdcc9;
+  border-radius: 11px;
+  background: var(--sifor-selected, #e3f1e8);
+  color: var(--sifor-accent, #14583d);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.page-note code,
+.page-alert code {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #ffffff9c;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+/* --- Badges -------------------------------------------------------------- */
+
+.page-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--sifor-selected, #e3f1e8);
+  color: var(--sifor-accent, #14583d);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.page-badge-muted {
+  background: var(--sifor-bg, #f3f7f4);
+  color: var(--sifor-muted, #64766b);
+}
+
+/* --- Utilities ----------------------------------------------------------- */
+
+.page-sr-only,
+.help-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.page-section-title {
+  margin: 0 0 14px;
+  color: var(--sifor-muted, #64766b);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+/* --- Profile identity card ---------------------------------------------- */
+
+.profile-summary {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.profile-avatar {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--sifor-selected, #e3f1e8);
+  color: var(--sifor-accent, #14583d);
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-summary h2 {
+  margin: 0;
+  font-size: 19px;
+  letter-spacing: -0.3px;
+}
+
+.profile-summary-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 15px;
+  border-radius: 11px;
+  background: var(--sifor-bg, #f3f7f4);
+  color: var(--sifor-muted, #64766b);
+  text-align: left;
+}
+
+.profile-summary-note svg {
+  flex-shrink: 0;
+  color: var(--sifor-accent, #14583d);
+}
+
+.profile-summary-note p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.profile-links {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.profile-links a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 14px;
+  border: 1px solid var(--sifor-border, #dfe8e2);
+  border-radius: 10px;
+  color: var(--sifor-text, #20372b);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.profile-links a:hover {
+  border-color: var(--sifor-accent, #14583d);
+  color: var(--sifor-accent, #14583d);
+}
+
+.profile-links svg {
+  color: var(--sifor-muted, #64766b);
+}
+
+.profile-locked-title {
+  margin: 26px 0 0;
+  color: var(--sifor-muted, #64766b);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+/* --- Compact inline field (account rows) --------------------------------- */
+
+.account-field {
+  display: grid;
+  gap: 4px;
+  color: var(--sifor-muted, #64766b);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.account-field select {
+  min-height: 40px;
+  max-width: 220px;
+  padding: 8px 11px;
+  border: 1px solid var(--sifor-border, #dfe8e2);
+  border-radius: 9px;
+  background: var(--sifor-surface, #fff);
+  color: var(--sifor-text, #20372b);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.account-field select:focus-visible {
+  outline: 2px solid var(--sifor-accent, #14583d);
+  outline-offset: 2px;
+}
+
+.user-accounts .page-card-text {
+  margin-bottom: 20px;
+}
+
+.user-accounts .page-row {
+  flex-wrap: wrap;
+}
+
+.user-accounts .page-actions {
+  margin-left: auto;
+}
+
+/* --- Language switch ------------------------------------------------------ */
+
+.language-switch {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--sifor-border, #dfe8e2);
+  border-radius: 999px;
+  background: var(--sifor-surface, #fff);
+}
+
+.language-switch-option {
+  min-width: 38px;
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sifor-muted, #64766b);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+}
+
+.language-switch-option:hover {
+  color: var(--sifor-accent, #14583d);
+}
+
+.language-switch-option.is-active {
+  background: var(--sifor-selected, #e3f1e8);
+  color: var(--sifor-accent, #14583d);
+}
+
+.language-switch-option:focus-visible {
+  outline: 2px solid var(--sifor-accent, #14583d);
+  outline-offset: 2px;
+}
+
+/* --- Status pages (404 / access denied) ---------------------------------- */
+
+.status-page {
+  display: grid;
+  place-items: center;
+  padding: 40px 0;
+}
+
+.status-card {
+  display: grid;
+  justify-items: center;
+  max-width: 620px;
+  padding: clamp(28px, 5vw, 46px);
+  text-align: center;
+}
+
+.status-illustration {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: var(--sifor-selected, #e3f1e8);
+  color: var(--sifor-accent, #14583d);
+}
+
+.status-number {
+  position: absolute;
+  right: -6px;
+  bottom: -2px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--sifor-accent, #14583d);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.status-content {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.status-content .page-heading-eyebrow {
+  margin: 0;
+}
+
+.status-content h1 {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 30px);
+  letter-spacing: -0.6px;
+}
+
+.status-content p {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--sifor-muted, #64766b);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.status-content .page-actions {
+  justify-content: center;
+  margin-top: 14px;
+}
+
+@media (max-width: 900px) {
+  .page-columns {
+    grid-template-columns: 1fr;
+  }
+}

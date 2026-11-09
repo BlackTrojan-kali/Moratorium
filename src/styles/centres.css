@@ -1,0 +1,322 @@
+.centres-page {
+  --centres-surface: var(--sifor-surface, #fff);
+  --centres-background: var(--sifor-bg, #f3f7f4);
+  --centres-border: var(--sifor-border, #dfe8e2);
+  --centres-text: var(--sifor-text, #20372b);
+  --centres-muted: var(--sifor-muted, #64766b);
+  --centres-accent: var(--sifor-accent, #14583d);
+  --centres-soft: var(--sifor-selected, #e3f1e8);
+
+  max-width: 1280px;
+  margin: 0 auto;
+  color: var(--centres-text);
+}
+
+.centres-page *,
+.centres-page *::before,
+.centres-page *::after {
+  box-sizing: border-box;
+}
+
+/* ── Page heading ─────────────────────────────────── */
+.centres-heading,
+.centres-editor-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 26px;
+}
+
+.centres-heading p {
+  margin: 0 0 8px;
+  color: var(--centres-muted);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.centres-heading h1 {
+  margin: 0 0 10px;
+  font-size: 32px;
+  letter-spacing: -0.6px;
+}
+
+/* ── Buttons ──────────────────────────────────────── */
+.centres-page button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid var(--centres-border);
+  border-radius: 10px;
+  background: var(--centres-surface);
+  color: var(--centres-text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.centres-page button.centres-primary {
+  background: #14583d;
+  border-color: #14583d;
+  color: #fff;
+}
+
+/* ── Form inputs ──────────────────────────────────── */
+.centres-page input,
+.centres-page select,
+.centres-page textarea {
+  min-height: 44px;
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid var(--centres-border);
+  border-radius: 10px;
+  background: var(--centres-surface);
+  color: var(--centres-text);
+  font: inherit;
+  font-size: 13px;
+}
+
+.centres-page textarea {
+  resize: vertical;
+}
+
+/* ── Search bar ───────────────────────────────────── */
+.centres-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 300px;
+  padding-left: 14px;
+  border: 1px solid var(--centres-border);
+  border-radius: 10px;
+  background: var(--centres-surface);
+  color: var(--centres-muted);
+}
+
+.centres-search:focus-within {
+  outline: 2px solid var(--centres-accent);
+  outline-offset: 2px;
+}
+
+/* ── Card ─────────────────────────────────────────── */
+.centres-card {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--centres-border);
+  border-radius: 18px;
+  background: var(--centres-surface);
+}
+
+/* ── Filters ──────────────────────────────────────── */
+.centres-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* ── Table ────────────────────────────────────────── */
+.centres-table-scroll {
+  overflow-x: auto;
+}
+
+.centres-page table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.centres-page th,
+.centres-page td {
+  padding: 16px;
+  border-bottom: 1px solid var(--centres-border);
+  text-align: left;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+.centres-page th {
+  background: var(--centres-background);
+  color: var(--centres-muted);
+  font-weight: 600;
+}
+
+/* ── Status badge ─────────────────────────────────── */
+.centres-status {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--centres-soft);
+  color: var(--centres-accent);
+  font-size: 12px;
+}
+
+/* ── Empty state ──────────────────────────────────── */
+.centres-empty {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 12px;
+  min-height: 230px;
+  padding: 25px;
+  color: var(--centres-muted);
+  text-align: center;
+}
+
+.centres-empty h2 {
+  margin: 0;
+  color: var(--centres-text);
+  font-size: 18px;
+}
+
+.centres-empty p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ── Pagination & form footer ─────────────────────── */
+.centres-pagination,
+.centres-form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding-top: 22px;
+}
+
+.centres-pagination > span,
+.centres-form-footer > span {
+  color: var(--centres-muted);
+  font-size: 12px;
+}
+
+.centres-pagination > div,
+.centres-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ── Editor panel ─────────────────────────────────── */
+.centres-editor {
+  margin-top: 24px;
+  scroll-margin-top: 24px;
+}
+
+.centres-editor-heading {
+  align-items: flex-start;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--centres-border);
+}
+
+.centres-editor-heading h2 {
+  margin: 0 0 8px;
+  font-size: 23px;
+  overflow-wrap: anywhere;
+}
+
+.centres-editor-heading p {
+  margin: 0;
+}
+
+/* ── Form fields grid ─────────────────────────────── */
+.centres-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.centres-fields label {
+  display: grid;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ── Feedback / alert ─────────────────────────────── */
+.centres-feedback {
+  padding: 16px;
+  margin: 0 0 20px;
+  border: 1px solid var(--centres-border);
+  border-radius: 12px;
+  background: var(--centres-background);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.centres-feedback[role="alert"] {
+  border-color: #c78368;
+}
+
+.centres-feedback p:first-child {
+  margin-top: 0;
+}
+
+/* ── Staff section ────────────────────────────────── */
+.centres-staff {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid var(--centres-border);
+}
+
+.centres-staff h3 {
+  margin: 0 0 18px;
+  font-size: 18px;
+}
+
+/* ── Disabled / focus states ──────────────────────── */
+.centres-page :is(button, input, select, textarea):disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.centres-page :is(button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--centres-accent);
+  outline-offset: 3px;
+}
+
+/* ── Screen-reader only ───────────────────────────── */
+.centres-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Responsive ───────────────────────────────────── */
+@media (max-width: 650px) {
+  .centres-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .centres-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .centres-card {
+    padding: 18px;
+  }
+
+  .centres-filters > label {
+    width: 100%;
+  }
+
+  .centres-pagination,
+  .centres-form-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

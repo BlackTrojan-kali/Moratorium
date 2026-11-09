@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend-Backend Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Frontend-Backend Connection Test</h1>
+    
+    <div class="test-section">
+        <div class="test-title">Configuration</div>
+        <div class="test-result info">
+            <strong>API URL:</strong> <span id="apiUrl">http://localhost:3000/api/v1</span><br>
+            <strong>Frontend URL:</strong> http://localhost:5173
+        </div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">CORS Test</div>
+        <button onclick="testCORS()">Test CORS Preflight</button>
+        <button onclick="testHealth()">Test Health Endpoint</button>
+        <div id="corsResults"></div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">Authentication Test</div>
+        <button onclick="testLogin()">Test Login (Invalid Credentials)</button>
+        <button onclick="testAuthMe()">Test /auth/me (Without Session)</button>
+        <div id="authResults"></div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">Protected Endpoint Test</div>
+        <button onclick="testRequests()">Test /requests (Without Auth)</button>
+        <div id="protectedResults"></div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">Full Integration Test</div>
+        <button onclick="runFullTest()">Run All Tests</button>
+        <div id="fullTestResults"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api/v1';
+        
+        function displayResult(elementId, message, type = 'info', data = null) {
+            const element = document.getElementById(elementId);
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.innerHTML = `<strong>${message}</strong>`;
+            if (data) {
+                const pre = document.createElement('pre');
+                pre.textContent = JSON.stringify(data, null, 2);
+                resultDiv.appendChild(pre);
+            }
+            element.appendChild(resultDiv);
+        }
+
+        function clearResults(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        async function testCORS() {
+            clearResults('corsResults');
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'Content-Type'
+                    }
+                });
+                
+                const corsHeaders = {
+                    'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                    'Access-Control-Allow-Credentials': response.headers.get('Access-Control-Allow-Credentials'),
+                    'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                    'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+                };
+                
+                displayResult('corsResults', 'CORS Preflight: SUCCESS', 'success', corsHeaders);
+            } catch (error) {
+                displayResult('corsResults', `CORS Preflight: FAILED - ${error.message}`, 'error');
+            }
+        }
+
+        async function testHealth() {
+            clearResults('corsResults');
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                displayResult('corsResults', 'Health Endpoint: SUCCESS', 'success', data);
+            } catch (error) {
+                displayResult('corsResults', `Health Endpoint: FAILED - ${error.message}`, 'error');
+            }
+        }
+
+        async function testLogin() {
+            clearResults('authResults');
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Origin': window.location.origin
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'wrongpassword'
+                    })
+                });
+                const data = await response.json();
+                
+                if (response.status === 401) {
+                    displayResult('authResults', 'Login (Invalid): SUCCESS - Correctly rejected invalid credentials', 'success', data);
+                } else {
+                    displayResult('authResults', `Login (Invalid): UNEXPECTED - Status ${response.status}`, 'error', data);
+                }
+            } catch (error) {
+                displayResult('authResults', `Login (Invalid): FAILED - ${error.message}`, 'error');
+            }
+        }
+
+        async function testAuthMe() {
+            clearResults('authResults');
+            try {
+                const response = await fetch(`${API_URL}/auth/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Origin': window.location.origin
+                    },
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (response.status === 401) {
+                    displayResult('authResults', '/auth/me (No Session): SUCCESS - Correctly required authentication', 'success', data);
+                } else {
+                    displayResult('authResults', `/auth/me (No Session): UNEXPECTED - Status ${response.status}`, 'error', data);
+                }
+            } catch (error) {
+                displayResult('authResults', `/auth/me (No Session): FAILED - ${error.message}`, 'error');
+            }
+        }
+
+        async function testRequests() {
+            clearResults('protectedResults');
+            try {
+                const response = await fetch(`${API_URL}/requests`, {
+                    method: 'GET',
+                    headers: {
+                        'Origin': window.location.origin
+                    },
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (response.status === 401) {
+                    displayResult('protectedResults', '/requests (No Auth): SUCCESS - Correctly protected', 'success', data);
+                } else {
+                    displayResult('protectedResults', `/requests (No Auth): UNEXPECTED - Status ${response.status}`, 'error', data);
+                }
+            } catch (error) {
+                displayResult('protectedResults', `/requests (No Auth): FAILED - ${error.message}`, 'error');
+            }
+        }
+
+        async function runFullTest() {
+            clearResults('fullTestResults');
+            displayResult('fullTestResults', 'Starting full integration test...', 'info');
+            
+            const results = [];
+            
+            // Test 1: Health
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                results.push({ test: 'Health Check', status: 'PASS', data });
+            } catch (error) {
+                results.push({ test: 'Health Check', status: 'FAIL', error: error.message });
+            }
+            
+            // Test 2: CORS
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'POST'
+                    }
+                });
+                results.push({ test: 'CORS Preflight', status: 'PASS', cors: response.headers.get('Access-Control-Allow-Origin') });
+            } catch (error) {
+                results.push({ test: 'CORS Preflight', status: 'FAIL', error: error.message });
+            }
+            
+            // Test 3: Invalid Login
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ email: 'test@test.com', password: 'wrong' })
+                });
+                const data = await response.json();
+                results.push({ test: 'Invalid Login Rejection', status: response.status === 401 ? 'PASS' : 'FAIL', responseStatus: response.status });
+            } catch (error) {
+                results.push({ test: 'Invalid Login Rejection', status: 'FAIL', error: error.message });
+            }
+            
+            // Test 4: Protected Endpoint
+            try {
+                const response = await fetch(`${API_URL}/requests`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                results.push({ test: 'Protected Endpoint', status: response.status === 401 ? 'PASS' : 'FAIL', responseStatus: response.status });
+            } catch (error) {
+                results.push({ test: 'Protected Endpoint', status: 'FAIL', error: error.message });
+            }
+            
+            // Display results
+            const passed = results.filter(r => r.status === 'PASS').length;
+            const total = results.length;
+            
+            displayResult('fullTestResults', `Test Results: ${passed}/${total} passed`, passed === total ? 'success' : 'error', results);
+        }
+
+        // Auto-run configuration check
+        document.getElementById('apiUrl').textContent = API_URL;
+    </script>
+</body>
+</html>
