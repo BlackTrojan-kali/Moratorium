@@ -1,0 +1,17 @@
+CREATE TABLE sessions (
+ token_hash TEXT PRIMARY KEY,
+ user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+ expires_at TIMESTAMPTZ NOT NULL,
+ created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX sessions_user ON sessions(user_id);
+CREATE TABLE password_resets (
+ token_hash TEXT PRIMARY KEY,
+ user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+ expires_at TIMESTAMPTZ NOT NULL
+);
+CREATE TABLE auth_limits (
+ key TEXT PRIMARY KEY,
+ attempts INTEGER NOT NULL,
+ expires_at TIMESTAMPTZ NOT NULL
+);
